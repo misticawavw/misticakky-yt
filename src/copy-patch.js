@@ -3,6 +3,7 @@ import express from 'express';
 const originalSend = express.response.send;
 const originalGet = express.application.get;
 const legalRoutesInstalled = Symbol.for('misticakky.legalRoutesInstalled');
+const verificationMeta = '<meta name="google-site-verification" content="iF8VyHZXCVgadNhUSMb7U8ekFrLWKHYAHlTSkwtDQXg" />';
 
 function decodeHtml(value = '') {
   return String(value)
@@ -115,6 +116,10 @@ const compactCss = `
 </style>`;
 
 express.response.send = function patchedSend(body) {
+  if (typeof body === 'string' && body.includes('</head>') && !body.includes('google-site-verification')) {
+    body = body.replace('</head>', `${verificationMeta}\n</head>`);
+  }
+
   if (typeof body === 'string' && body.includes('Convites capturados')) {
     if (!body.includes('id="compact-dashboard-fix"')) {
       body = body.replace('</head>', `${compactCss}</head>`);
