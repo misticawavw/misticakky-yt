@@ -5,9 +5,9 @@
   "type": "module",
   "engines": { "node": ">=20" },
   "scripts": {
-    "start": "node src/server.js",
+    "start": "node --import ./src/copy-patch.js src/server.js",
     "test": "node --test",
-    "check": "node --check src/server.js && node --check src/gmail-utils.js"
+    "check": "node --check src/server.js && node --check src/gmail-utils.js && node --check src/copy-patch.js"
   },
   "dependencies": {
     "cookie-session": "^2.1.1",
