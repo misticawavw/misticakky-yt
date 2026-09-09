@@ -1,0 +1,19 @@
+{
+  "name": "misticakky-yt",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test",
+    "check": "node --check src/server.js && node --check src/gmail-utils.js"
+  },
+  "dependencies": {
+    "cookie-session": "^2.1.1",
+    "express": "^5.1.0",
+    "googleapis": "^160.0.0",
+    "helmet": "^8.1.0",
+    "pg": "^8.16.3"
+  }
+}
