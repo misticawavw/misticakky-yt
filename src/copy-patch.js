@@ -31,6 +31,36 @@ function groupedLinkText(links, groupSize = 5) {
   return groups.join('\n\n');
 }
 
+const oceanBannerCss = `
+<style id="misticakky-ocean-banner-css">
+  .misticakky-ocean-banner{position:relative;min-height:250px;overflow:hidden;border-radius:30px;margin:0 0 20px;padding:34px 38px;display:flex;align-items:flex-end;color:#fff;background:radial-gradient(circle at 24% 18%,rgba(255,255,255,.82),transparent 17%),linear-gradient(180deg,#bce5e9 0%,#79bdc8 48%,#2f8798 100%);box-shadow:0 24px 62px rgba(41,105,120,.22);isolation:isolate}
+  .misticakky-ocean-banner:before,.misticakky-ocean-banner:after{content:"";position:absolute;left:-8%;width:118%;border-radius:50%;z-index:-1}
+  .misticakky-ocean-banner:before{height:155px;bottom:22px;background:rgba(255,255,255,.24);transform:rotate(-3deg)}
+  .misticakky-ocean-banner:after{height:132px;bottom:-60px;background:rgba(18,98,116,.37);transform:rotate(2deg)}
+  .misticakky-banner-sun{position:absolute;right:58px;top:34px;width:76px;height:76px;border-radius:50%;background:#ffd995;box-shadow:0 0 0 13px rgba(255,239,190,.13)}
+  .misticakky-banner-fish{position:absolute;right:128px;top:120px;width:84px;height:54px;border-radius:60% 45% 55% 45%;background:#ef7f8f;transform:rotate(-7deg);box-shadow:0 12px 25px rgba(16,77,89,.17)}
+  .misticakky-banner-fish:before{content:"";position:absolute;width:31px;height:32px;left:-19px;top:11px;background:#ef7f8f;clip-path:polygon(100% 50%,0 0,0 100%)}
+  .misticakky-banner-fish:after{content:"";position:absolute;width:8px;height:8px;right:17px;top:14px;border-radius:50%;background:#233c43;box-shadow:0 0 0 3px rgba(255,255,255,.84)}
+  .misticakky-banner-bubbles{position:absolute;right:246px;top:62px;font-size:22px;opacity:.56;letter-spacing:13px}
+  .misticakky-banner-copy{position:relative;z-index:2;max-width:650px}
+  .misticakky-banner-kicker{display:inline-flex;padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.19);border:1px solid rgba(255,255,255,.28);font-size:11px;font-weight:900;letter-spacing:.7px;text-transform:uppercase}
+  .misticakky-banner-title{margin:14px 0 8px;font-size:clamp(36px,5vw,60px);line-height:.97;letter-spacing:-2px;color:#fff}
+  .misticakky-banner-text{margin:0;max-width:590px;color:rgba(255,255,255,.92);font-size:14px;line-height:1.55}
+  @media(max-width:780px){.misticakky-ocean-banner{min-height:225px;padding:28px 24px}.misticakky-banner-title{font-size:39px}.misticakky-banner-sun{right:24px;top:27px;width:58px;height:58px}.misticakky-banner-fish{right:62px;top:116px;width:64px;height:42px}.misticakky-banner-bubbles{display:none}}
+</style>`;
+
+const oceanBannerHtml = `
+<section class="misticakky-ocean-banner" id="misticakky-ocean-banner">
+  <div class="misticakky-banner-sun"></div>
+  <div class="misticakky-banner-bubbles">○ ◦ ○</div>
+  <div class="misticakky-banner-fish"></div>
+  <div class="misticakky-banner-copy">
+    <span class="misticakky-banner-kicker">misticakky yt · GMAX Convites</span>
+    <h1 class="misticakky-banner-title">Seu painel no ritmo do mar.</h1>
+    <p class="misticakky-banner-text">Convites de Família Google organizados em um painel rosa e oceânico, mantendo a identidade visual do seu projeto.</p>
+  </div>
+</section>`;
+
 function publicPage(title, body) {
   return `<!doctype html>
 <html lang="pt-BR">
@@ -118,14 +148,24 @@ const compactCss = `
   .grid>section.card:nth-child(2) .invite .btn{padding:7px 10px;font-size:11px;border-radius:10px}
   #copy-links-panel{margin-top:14px!important;padding:16px!important}
   #all-invite-links{min-height:105px!important;max-height:170px!important}
-  @media(max-width:780px){
-    .grid>section.card:nth-child(2){max-height:560px}
-  }
+  @media(max-width:780px){.grid>section.card:nth-child(2){max-height:560px}}
 </style>`;
 
 express.response.send = function patchedSend(body) {
   if (typeof body === 'string' && body.includes('</head>') && !body.includes('google-site-verification')) {
     body = body.replace('</head>', `${verificationMeta}\n</head>`);
+  }
+
+  if (typeof body === 'string' && body.includes('</head>') && !body.includes('id="misticakky-ocean-banner-css"') && (body.includes('class="login"') || body.includes('Convites capturados'))) {
+    body = body.replace('</head>', `${oceanBannerCss}\n</head>`);
+  }
+
+  if (typeof body === 'string' && body.includes('class="login"') && !body.includes('id="misticakky-ocean-banner"')) {
+    body = body.replace('<div class="login">', `${oceanBannerHtml}<div class="login">`);
+  }
+
+  if (typeof body === 'string' && body.includes('Convites capturados') && !body.includes('id="misticakky-ocean-banner"')) {
+    body = body.replace('<div class="card hero"', `${oceanBannerHtml}<div class="card hero"`);
   }
 
   if (typeof body === 'string' && body.includes('Convites capturados')) {
