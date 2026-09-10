@@ -23,6 +23,14 @@ function escapeHtml(value = '') {
     .replaceAll("'", '&#039;');
 }
 
+function groupedLinkText(links, groupSize = 5) {
+  const groups = [];
+  for (let index = 0; index < links.length; index += groupSize) {
+    groups.push(links.slice(index, index + groupSize).join('\n'));
+  }
+  return groups.join('\n\n');
+}
+
 function publicPage(title, body) {
   return `<!doctype html>
 <html lang="pt-BR">
@@ -129,13 +137,13 @@ express.response.send = function patchedSend(body) {
     const links = [...new Set(matches.map(match => decodeHtml(match[1])))];
 
     if (links.length > 0 && !body.includes('id="all-invite-links"')) {
-      const list = escapeHtml(links.join('\n'));
+      const list = escapeHtml(groupedLinkText(links, 5));
       const panel = `
 <div id="copy-links-panel" class="card stack">
   <div class="row">
     <div>
       <h2 style="margin:0">Copiar links</h2>
-      <p class="tiny muted" style="margin-bottom:0">${links.length} link(s) · um por linha</p>
+      <p class="tiny muted" style="margin-bottom:0">${links.length} link(s) · blocos de 5 · um por linha</p>
     </div>
     <button class="btn secondary" type="button" onclick="copyAllInviteLinks(this)">Copiar todos os links</button>
   </div>
