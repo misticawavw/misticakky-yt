@@ -5,9 +5,9 @@
   "type": "module",
   "engines": { "node": ">=20" },
   "scripts": {
-    "start": "node --import ./src/sade-theme.js --import ./src/invite-controls.js --import ./src/copy-patch.js --import ./src/separador-status.js src/server.js",
+    "start": "node --import ./src/sade-theme.js --import ./src/invite-controls.js --import ./src/copy-patch.js src/server.js",
     "test": "node --test",
-    "check": "node --check src/server.js && node --check src/gmail-utils.js && node --check src/copy-patch.js && node --check src/sade-theme.js && node --check src/invite-controls.js && node --check src/separador-status.js"
+    "check": "node --check src/server.js && node --check src/gmail-utils.js && node --check src/copy-patch.js && node --check src/sade-theme.js && node --check src/invite-controls.js"
   },
   "dependencies": {
     "cookie-session": "^2.1.1",
